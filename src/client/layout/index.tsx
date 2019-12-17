@@ -1,7 +1,15 @@
-import React, { Suspense } from 'react';
-import { useRouter, Link } from '@atlaskit/router';
+import React, { Suspense } from "react";
+import { useRouter, Link } from "@atlaskit/router";
+import {
+  Grid,
+  LeftPanel,
+  Banner,
+  Nav,
+  LeftSideBar,
+  RightPanel
+} from "@atlaskit/page-layout";
 
-import { ErrorBoundary } from './error-boundary';
+import { ErrorBoundary } from "./error-boundary";
 
 const RouteSidebar = () => {
   const [{ route }] = useRouter();
@@ -10,8 +18,8 @@ const RouteSidebar = () => {
   return (
     <aside>
       <ErrorBoundary>
-        <Suspense fallback={'...'}>
-          {/* 
+        <Suspense fallback={"..."}>
+          {/*
        // @ts-ignore */}
           <route.sidebar />
         </Suspense>
@@ -25,8 +33,8 @@ const RouteComponent = () => {
   return (
     <main>
       <ErrorBoundary>
-        <Suspense fallback={'...'}>
-          {/* 
+        <Suspense fallback={"..."}>
+          {/*
        // @ts-ignore */}
           <route.component />
         </Suspense>
@@ -37,12 +45,23 @@ const RouteComponent = () => {
 
 export const Layout = () => {
   return (
-    <section>
-      <header>
+    <Grid>
+      <LeftPanel width={200} isFixed>
+        Left
+      </LeftPanel>
+      <Banner height={50} isFixed>
         <Link href="/">Home</Link>
-      </header>
-      <RouteSidebar />
-      <RouteComponent />
-    </section>
+      </Banner>
+      <Nav height={100} isFixed>
+        <RouteSidebar />
+      </Nav>
+      <LeftSideBar width={200}>Sidebar</LeftSideBar>
+      <main style={{ gridArea: "main" }}>
+        <RouteComponent />
+      </main>
+      <RightPanel width={200} isFixed>
+        Right
+      </RightPanel>
+    </Grid>
   );
 };
