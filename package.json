@@ -10,6 +10,7 @@
     "start:prod": "NODE_ENV=production node build/server.js"
   },
   "dependencies": {
+    "@atlaskit/page-layout": "http://s3-ap-southeast-2.amazonaws.com/atlaskit-artefacts/f83fef0243bf/dists/atlaskit-page-layout-0.0.1.tgz",
     "@atlaskit/router": "^0.0.2",
     "express": "^4.16.4",
     "history": "^4.10.1",
@@ -36,5 +37,8 @@
     "eslint-config-prettier": "^6.7.0",
     "eslint-plugin-prettier": "^3.1.1",
     "prettier": "^1.19.1"
-  }
+  },
+  "main": "index.js",
+  "repository": "git@github.com:harshai/react-suspense-stream.git",
+  "author": "Harsha Ivaturi <isriharsha@atlassian.com>"
 }
