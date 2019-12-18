@@ -74,8 +74,8 @@ server
       res.write(chunk);
     });
 
-    stream.on("error", () => {
-      res.end(`<script>alert('error')</script>`);
+    stream.on("error", (err: Error) => {
+      res.end(`<script>alert("${err.message}")</script>`);
     });
 
     stream.on("end", async () => {

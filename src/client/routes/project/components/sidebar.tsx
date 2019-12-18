@@ -3,11 +3,14 @@ import { useResource } from '@atlaskit/router';
 
 import { sidebarResource } from '../../resources';
 
-const HomeSidebar = () => {
-  const [{ data, error, loading, promise }] = useResource(sidebarResource);
+const ProjectSidebar = () => {
+  const [{ data, error, promise }] = useResource(sidebarResource);
   if (!data && !error && promise) {
     throw promise;
   }
+
+  // needed due to batchedUpdates fix missing in router
+  if (!data) return null;
 
   return (
     <div>
@@ -21,4 +24,4 @@ const HomeSidebar = () => {
   );
 };
 
-export default HomeSidebar;
+export default ProjectSidebar;
