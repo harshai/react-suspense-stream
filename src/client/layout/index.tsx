@@ -5,7 +5,7 @@ import {
   LeftPanel,
   Banner,
   Nav,
-  LeftSideBar,
+  LeftSidebar,
   RightPanel
 } from "@atlaskit/page-layout";
 
@@ -46,22 +46,22 @@ const RouteComponent = () => {
 export const Layout = () => {
   return (
     <Grid>
-      <LeftPanel width={200} isFixed>
+      <LeftPanel width="200px" isFixed>
         Left
       </LeftPanel>
-      <Banner height={50} isFixed>
+      <Banner height="50px" isFixed>
         <Link href="/">Home</Link>
       </Banner>
-      <Nav height={100} isFixed>
+      <Nav height="100px" isFixed>
         <RouteSidebar />
       </Nav>
-      <LeftSideBar width={200}>Sidebar</LeftSideBar>
+      <LeftSidebar width="200px">Sidebar</LeftSidebar>
+      <RightPanel width="200px" isFixed>
+        Right
+      </RightPanel>
       <main style={{ gridArea: "main" }}>
         <RouteComponent />
       </main>
-      <RightPanel width={200} isFixed>
-        Right
-      </RightPanel>
     </Grid>
   );
 };

@@ -10,7 +10,7 @@
     "start:prod": "NODE_ENV=production node build/server.js"
   },
   "dependencies": {
-    "@atlaskit/page-layout": "http://s3-ap-southeast-2.amazonaws.com/atlaskit-artefacts/f83fef0243bf/dists/atlaskit-page-layout-0.0.1.tgz",
+    "@atlaskit/page-layout": "http://s3-ap-southeast-2.amazonaws.com/atlaskit-artefacts/3d36b2cead15/dists/atlaskit-page-layout-0.0.1.tgz",
     "@atlaskit/router": "^0.0.2",
     "express": "^4.16.4",
     "history": "^4.10.1",
