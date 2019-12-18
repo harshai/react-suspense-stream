@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@atlaskit/page-layout@http://s3-ap-southeast-2.amazonaws.com/atlaskit-artefacts/3d36b2cead15/dists/atlaskit-page-layout-0.0.1.tgz":
+"@atlaskit/page-layout@http://s3-ap-southeast-2.amazonaws.com/atlaskit-artefacts/56557cf99b7b/dists/atlaskit-page-layout-0.0.1.tgz":
   version "0.0.1"
-  resolved "http://s3-ap-southeast-2.amazonaws.com/atlaskit-artefacts/3d36b2cead15/dists/atlaskit-page-layout-0.0.1.tgz#7dd4213f206e9b6e3f699bf8a7de4d8eae68b209"
+  resolved "http://s3-ap-southeast-2.amazonaws.com/atlaskit-artefacts/56557cf99b7b/dists/atlaskit-page-layout-0.0.1.tgz#72c7202642f577ab0c4d211d051135e3b6727fd6"
   dependencies:
     "@babel/runtime" "^7.0.0"
     "@emotion/core" "^10.0.9"
