@@ -7,6 +7,10 @@ export const projects = {
   items: [project.AA, project.BB],
 };
 
-export const sidebar = {
+export const projectSidebar = {
   items: ['Settings'],
+};
+
+export const settingsSidebar = {
+  items: ['General configuration', 'Audit log', 'Project roles'],
 };

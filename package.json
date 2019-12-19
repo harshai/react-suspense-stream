@@ -12,6 +12,7 @@
   "dependencies": {
     "@atlaskit/page-layout": "http://s3-ap-southeast-2.amazonaws.com/atlaskit-artefacts/56557cf99b7b/dists/atlaskit-page-layout-0.0.1.tgz",
     "@atlaskit/router": "^0.0.2",
+    "@emotion/core": "^10.0.22",
     "express": "^4.16.4",
     "history": "^4.10.1",
     "isomorphic-fetch": "^2.2.1",

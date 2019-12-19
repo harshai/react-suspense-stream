@@ -4,8 +4,11 @@ import { hydrate } from 'react-dom';
 import { Router } from '@atlaskit/router';
 import { createBrowserHistory } from 'history';
 
-import { Layout } from './layout';
+import { LegacyLayout, ModernLayout } from './layout';
 import { routes } from './routes';
+
+// @ts-ignore
+const Layout = window.__LAYOUT__ === 'modern' ? ModernLayout : LegacyLayout;
 
 hydrate(
   <Router

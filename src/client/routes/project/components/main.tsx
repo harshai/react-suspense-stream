@@ -3,7 +3,7 @@ import { useResource } from '@atlaskit/router';
 
 import { projectResource } from '../resources';
 
-const ProjectComponent = () => {
+export const ProjectComponent = () => {
   const [{ data, error, promise }] = useResource(projectResource);
   if (!data && !error && promise) {
     throw promise;
@@ -16,5 +16,3 @@ const ProjectComponent = () => {
     </div>
   );
 };
-
-export default ProjectComponent;

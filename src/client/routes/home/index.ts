@@ -1,5 +1,5 @@
 import { homeResource } from './resources';
-import HomeComponent from './components/main';
+import { HomeComponent } from './components/main';
 
 export const homeRoute = {
   name: 'home',

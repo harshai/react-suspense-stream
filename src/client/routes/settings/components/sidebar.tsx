@@ -1,10 +1,10 @@
 import React from 'react';
 import { useResource } from '@atlaskit/router';
 
-import { projectSidebarResource } from '../resources';
+import { settingsSidebarResource } from '../resources';
 
-export const ProjectSidebar = () => {
-  const [{ data, error, promise }] = useResource(projectSidebarResource);
+export const SettingsSidebar = () => {
+  const [{ data, error, promise }] = useResource(settingsSidebarResource);
   if (!data && !error && promise) {
     throw promise;
   }
@@ -14,7 +14,6 @@ export const ProjectSidebar = () => {
 
   return (
     <div>
-      <strong>Sidebar</strong>
       <ul>
         {(data as any).items.map((itm: any) => (
           <li key={itm}>{itm}</li>

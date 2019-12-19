@@ -10,3 +10,14 @@ export const projectResource = createResource({
     return data;
   },
 });
+
+export const projectSidebarResource = createResource({
+  type: 'SIDEBAR',
+  getKey: () => 'state',
+  // @ts-ignore
+  getData: async (_, { baseUrl }) => {
+    const resp = await fetch(`${baseUrl}/api/sidebar/projects`);
+    const data = await resp.json();
+    return data;
+  },
+});

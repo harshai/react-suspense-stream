@@ -3,7 +3,7 @@ import { useResource, Link } from '@atlaskit/router';
 
 import { homeResource } from '../resources';
 
-const HomeComponent = () => {
+export const HomeComponent = () => {
   const [{ data, error, loading, promise }] = useResource(homeResource);
   if (!data && !error && promise) {
     throw promise;
@@ -23,5 +23,3 @@ const HomeComponent = () => {
     </div>
   );
 };
-
-export default HomeComponent;
