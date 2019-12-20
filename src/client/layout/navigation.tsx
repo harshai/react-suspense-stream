@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { Nav } from '@atlaskit/page-layout';
+import { Nav } from '../../@atlaskit/page-layout';
 import { Link } from '@atlaskit/router';
 import React, { ComponentProps } from 'react';
 

@@ -1,10 +1,10 @@
+/** @jsx jsx */
 import {
   Grid,
   Banner,
   RightPanel
-} from '@atlaskit/page-layout';
-import { Global } from '@emotion/core';
-import React from 'react';
+} from '../../@atlaskit/page-layout';
+import { jsx, Global } from '@emotion/core';
 
 import { Content } from './content';
 import { Navigation } from './navigation';
@@ -41,19 +41,20 @@ const contentStyles = {
   padding: 0,
   // position: 'relative',
 
+  background: 'purple',
+
   // In jira-frontend:
   position: 'absolute',
   left: 'var(--leftSidebarWidth)',
   top: 'calc(var(--bannerHeight) + var(--navHeight))',
   right: 'var(--rightPanelWidth)',
-  bottom: 0,
 } as const;
 
 export const LegacyLayout = () => {
   return (
-      <div id="page-body" style={pageBodyStyles}>
+      <div id="page-body" css={pageBodyStyles}>
         <Global styles={globalStyles}/>
-        <div id="navigation-app" style={navigationAppStyles}>
+        <div id="navigation-app" css={navigationAppStyles}>
           <Grid>
             <Banner height="50px" isFixed>
               Banner
@@ -65,7 +66,7 @@ export const LegacyLayout = () => {
             </RightPanel>
           </Grid>
         </div>
-        <div id="content" style={contentStyles}>
+        <div id="content" css={contentStyles}>
           <Content/>
         </div>
       </div>

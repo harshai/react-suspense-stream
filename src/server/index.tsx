@@ -1,8 +1,8 @@
 import React, { ComponentType } from 'react';
+import { StaticRouter } from '@atlaskit/router';
+import express, { Request, Response } from 'express';
 // @ts-ignore
 import { renderToNodeStreamAsync } from 'react-lightyear/server';
-import express, { Request, Response } from 'express';
-import { StaticRouter } from '@atlaskit/router';
 import 'isomorphic-fetch';
 
 import { LegacyLayout, ModernLayout } from '../client/layout';
@@ -15,7 +15,8 @@ const server = express();
 
 const render = (req: Request, res: Response, Layout: ComponentType<{}>) => {
   const location = req.url;
-  const baseUrl = `${req.protocol}://${req.get('Host')}`;
+  // const baseUrl = `${req.protocol}://${req.get('Host')}`;
+  const baseUrl = 'http://localhost:3000';
   const resourceContext = { baseUrl };
   const resourcesPromise = StaticRouter.requestResources({
     location,
@@ -63,6 +64,9 @@ const render = (req: Request, res: Response, Layout: ComponentType<{}>) => {
     res.end(`<script>alert("${err.message}")</script>`);
   });
 
+  const isIE = true;
+  const clientJs = isIE ? assets.client.js.replace('localhost', '10.0.2.2') : assets.client.js;
+
   stream.on('end', async () => {
     const resourceData = await resourcesPromise;
     res.end(`</div>
@@ -70,8 +74,8 @@ const render = (req: Request, res: Response, Layout: ComponentType<{}>) => {
     <script>window.__INITIAL_STATE__ = ${JSON.stringify(resourceData)};</script>
     ${
         process.env.NODE_ENV === 'production'
-            ? `<script src="${assets.client.js}" defer></script>`
-            : `<script src="${assets.client.js}" defer crossorigin></script>`
+            ? `<script src="${clientJs}" defer></script>`
+            : `<script src="${clientJs}" defer crossorigin></script>`
     }
   </body>
 </html>`);

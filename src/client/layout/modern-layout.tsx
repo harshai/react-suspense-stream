@@ -2,8 +2,9 @@ import React from 'react';
 import {
   Grid,
   Banner,
-  RightPanel
-} from '@atlaskit/page-layout';
+  Main,
+  RightPanel,
+} from '../../@atlaskit/page-layout';
 import { Global } from '@emotion/core';
 
 import { Content } from './content';
@@ -26,10 +27,10 @@ export const ModernLayout = () => {
           </Banner>
           <Navigation layoutType='modern'/>
           <Sidebar/>
-          <main style={{ gridArea: 'main' }}>
+          <Main>
             <Content/>
-          </main>
-          <RightPanel width="200px" isFixed>
+          </Main>
+          <RightPanel width="200px">
             Right
           </RightPanel>
         </Grid>
