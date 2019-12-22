@@ -3,7 +3,7 @@ import {
   Grid,
   Banner,
   RightPanel
-} from '@atlaskit/page-layout';
+} from '../../packages';
 import { Global } from '@emotion/core';
 
 import { Content } from './content';

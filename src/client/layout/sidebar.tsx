@@ -1,5 +1,5 @@
 import { useRouter } from '@atlaskit/router';
-import { LeftSidebar } from '@atlaskit/page-layout';
+import { LeftSidebar } from '../../packages';
 import { ErrorBoundary } from './error-boundary';
 import React, { Suspense } from 'react';
 
