@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { jsx, Global, css } from '@emotion/core';
 // Emotion lack grid support: https://github.com/emotion-js/emotion/issues/1617
 
@@ -26,7 +26,7 @@ const Banner = (props: SlotProps) => {
     msGridColumn: 2,
     msGridColumnSpan: 3,
     msGridRow: 1,
-    width: 'calc(100vw - var(--leftPanelWidth) - var(--rightPanelWidth))',
+    width: 'calc(100% - var(--leftPanelWidth) - var(--rightPanelWidth))',
   };
   return (
       <div css={bannerStyles}>
@@ -60,7 +60,8 @@ const Nav = (props: SlotProps) => {
     msGridColumn: 2,
     msGridColumnSpan: 3,
     msGridRow: 2,
-    width: 'calc(100vw - var(--leftPanelWidth) - var(--rightPanelWidth))',
+    // TODO check 100% in IE11 without it blowing up
+    width: 'calc(100% - var(--leftPanelWidth) - var(--rightPanelWidth))',
   };
 
   return (
@@ -95,6 +96,93 @@ const Main = (props: { children: ReactNode }) => {
   );
 };
 
+type LeftSidebarTransitionProps = {
+  width?: string;
+};
+
+const usePrevious = (value: any) => {
+  const ref = useRef();
+
+  useEffect(() => {
+    ref.current = value;
+  }, [value]);
+
+  return ref.current;
+};
+
+const toNumber = (value: string) => parseInt(value.replace('px', ''), 10);
+
+const LeftSidebarTransition = (props: LeftSidebarTransitionProps) => {
+  const { width } = props;
+  const stylesRef = useRef(null);
+  const [leftSidebarWidth, setLeftSidebarWidth] = useState(width);
+  const prevWidth = usePrevious(leftSidebarWidth);
+
+  useEffect(() => {
+    // if (prevWidth && (width !== prevWidth || leftSidebarWidth !== width)) {
+    if (prevWidth && (width !== prevWidth)) {
+      const prevWidthValue = toNumber(prevWidth! as string);
+      const widthValue = toNumber(width! as string);
+      // const leftSidebarWidthValue = toNumber(leftSidebarWidth! as string);
+      // if (widthValue < prevWidthValue) {
+      //   setLeftSidebarWidth(`${Math.max(leftSidebarWidthValue - 5, widthValue)}px`);
+      // } else {
+      //   setLeftSidebarWidth(`${Math.min(leftSidebarWidthValue + 5, widthValue)}px`);
+      // }
+      const duration = 100;
+      const now = Date.now();
+      const start = performance.now();
+      const distance = Math.abs(prevWidthValue - widthValue);
+      const transition = (timestamp: number) => {
+        const delta = timestamp - start;
+        const progress = Math.min(delta / duration, 1);
+        const position = distance * progress;
+        let currentWidth;
+        if (widthValue < prevWidthValue) {
+          currentWidth = Math.round(Math.max(prevWidthValue - position, widthValue));
+        } else {
+          currentWidth = Math.round(Math.min(prevWidthValue + position, widthValue));
+        }
+
+        stylesRef.current.innerHTML = `
+            :root {
+              --leftSidebarWidth: ${currentWidth}px;
+            }
+          `;
+
+        if (delta < duration) {
+          requestAnimationFrame(transition);
+        } else {
+          console.log('Took', Date.now() -  now);
+          setLeftSidebarWidth(width);
+        }
+      };
+
+      requestAnimationFrame(transition);
+    }
+  }, [prevWidth, width]);
+
+  // return (
+  //     <Global
+  //         styles={css`
+  //         :root {
+  //           --leftSidebarWidth: ${leftSidebarWidth};
+  //         }
+  //       `}
+  //     />
+  // );
+
+  const rules = `
+    :root {
+      --leftSidebarWidth: ${leftSidebarWidth};
+    }
+  `;
+
+  return (
+      <style ref={stylesRef} dangerouslySetInnerHTML={{ __html: rules }} />
+  );
+};
+
 const LeftSidebar = (props: SlotProps) => {
   const { children, width, isFixed } = props;
   const styles = {
@@ -118,13 +206,7 @@ const LeftSidebar = (props: SlotProps) => {
   return (
       <div css={leftSidebarStyles}>
         <div css={fixedStyles}>
-          <Global
-              styles={css`
-          :root {
-            --leftSidebarWidth: ${width};
-          }
-        `}
-          />
+          <LeftSidebarTransition width={width}/>
           {children}
         </div>
       </div>

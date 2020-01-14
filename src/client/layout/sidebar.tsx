@@ -1,15 +1,20 @@
 import { useRouter } from '@atlaskit/router';
-import React, { Suspense, useState } from 'react';
+import React, { Suspense } from 'react';
 
 import { LeftSidebar } from '../../@atlaskit/page-layout';
+import { useSidebar } from '../controllers/use-sidebar';
 import { ErrorBoundary } from './error-boundary';
 
 export const Sidebar = () => {
   const [{ route }] = useRouter();
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const { collapse, expand, isCollapsed, } = useSidebar();
   const width = isCollapsed ? '50px' : '200px';
   const onClick = () => {
-    setIsCollapsed(!isCollapsed);
+    if (isCollapsed) {
+      expand();
+    } else {
+      collapse();
+    }
   };
 
   // @ts-ignore

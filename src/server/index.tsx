@@ -64,7 +64,7 @@ const render = (req: Request, res: Response, Layout: ComponentType<{}>) => {
     res.end(`<script>alert("${err.message}")</script>`);
   });
 
-  const isIE = true;
+  const isIE = false;
   const clientJs = isIE ? assets.client.js.replace('localhost', '10.0.2.2') : assets.client.js;
 
   stream.on('end', async () => {

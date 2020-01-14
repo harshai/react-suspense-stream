@@ -30,7 +30,6 @@ hydrate(
 
 cssVars({
   exclude: 'link',
-  onlyLegacy: false,
   watch: true,
 });
 
