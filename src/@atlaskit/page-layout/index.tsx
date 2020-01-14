@@ -110,6 +110,7 @@ const usePrevious = (value: any) => {
   return ref.current;
 };
 
+const easeInOutQuad = (t: number) => t<.5 ? 2*t*t : -1+(4-2*t)*t;
 const toNumber = (value: string) => parseInt(value.replace('px', ''), 10);
 
 const LeftSidebarTransition = (props: LeftSidebarTransitionProps) => {
@@ -119,30 +120,17 @@ const LeftSidebarTransition = (props: LeftSidebarTransitionProps) => {
   const prevWidth = usePrevious(leftSidebarWidth);
 
   useEffect(() => {
-    // if (prevWidth && (width !== prevWidth || leftSidebarWidth !== width)) {
     if (prevWidth && (width !== prevWidth)) {
-      const prevWidthValue = toNumber(prevWidth! as string);
-      const widthValue = toNumber(width! as string);
-      // const leftSidebarWidthValue = toNumber(leftSidebarWidth! as string);
-      // if (widthValue < prevWidthValue) {
-      //   setLeftSidebarWidth(`${Math.max(leftSidebarWidthValue - 5, widthValue)}px`);
-      // } else {
-      //   setLeftSidebarWidth(`${Math.min(leftSidebarWidthValue + 5, widthValue)}px`);
-      // }
-      const duration = 100;
-      const now = Date.now();
+      const x1 = toNumber(prevWidth! as string);
+      const x2 = toNumber(width! as string);
+      const duration = 500;
       const start = performance.now();
-      const distance = Math.abs(prevWidthValue - widthValue);
-      const transition = (timestamp: number) => {
-        const delta = timestamp - start;
+      const transition = (t: number) => {
+        const delta = t - start;
+        // Progress = 0 -> 1
         const progress = Math.min(delta / duration, 1);
-        const position = distance * progress;
-        let currentWidth;
-        if (widthValue < prevWidthValue) {
-          currentWidth = Math.round(Math.max(prevWidthValue - position, widthValue));
-        } else {
-          currentWidth = Math.round(Math.min(prevWidthValue + position, widthValue));
-        }
+        const position = x1 + (x2 - x1) * easeInOutQuad(progress);
+        const currentWidth = Math.round(position);
 
         stylesRef.current.innerHTML = `
             :root {
@@ -153,7 +141,6 @@ const LeftSidebarTransition = (props: LeftSidebarTransitionProps) => {
         if (delta < duration) {
           requestAnimationFrame(transition);
         } else {
-          console.log('Took', Date.now() -  now);
           setLeftSidebarWidth(width);
         }
       };
