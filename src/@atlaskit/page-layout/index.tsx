@@ -120,33 +120,34 @@ const LeftSidebarTransition = (props: LeftSidebarTransitionProps) => {
   const prevWidth = usePrevious(leftSidebarWidth);
 
   useEffect(() => {
-    if (prevWidth && (width !== prevWidth)) {
-      const x1 = toNumber(prevWidth! as string);
-      const x2 = toNumber(width! as string);
-      const duration = 500;
-      const start = performance.now();
-      const transition = (t: number) => {
-        const delta = t - start;
-        // Progress = 0 -> 1
-        const progress = Math.min(delta / duration, 1);
-        const position = x1 + (x2 - x1) * easeInOutQuad(progress);
-        const currentWidth = Math.round(position);
-
-        stylesRef.current.innerHTML = `
-            :root {
-              --leftSidebarWidth: ${currentWidth}px;
-            }
-          `;
-
-        if (delta < duration) {
-          requestAnimationFrame(transition);
-        } else {
-          setLeftSidebarWidth(width);
-        }
-      };
-
-      requestAnimationFrame(transition);
-    }
+    setLeftSidebarWidth(width);
+  //   if (prevwidth && (width !== prevwidth)) {
+  //     const x1 = tonumber(prevwidth! as string);
+  //     const x2 = tonumber(width! as string);
+  //     const duration = 500;
+  //     const start = performance.now();
+  //     const transition = (t: number) => {
+  //       const delta = t - start;
+  //       // progress = 0 -> 1
+  //       const progress = math.min(delta / duration, 1);
+  //       const position = x1 + (x2 - x1) * easeinoutquad(progress);
+  //       const currentwidth = math.round(position);
+  //
+  //       stylesref.current.innerhtml = `
+  //           :root {
+  //             --leftsidebarwidth: ${currentwidth}px;
+  //           }
+  //         `;
+  //
+  //       if (delta < duration) {
+  //         requestanimationframe(transition);
+  //       } else {
+  //         setleftsidebarwidth(width);
+  //       }
+  //     };
+  //
+  //     requestanimationframe(transition);
+  //   }
   }, [prevWidth, width]);
 
   // return (
