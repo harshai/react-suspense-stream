@@ -1,53 +1,61 @@
 /** @jsx jsx */
-import { useRef } from 'react';
+import { useRef, MouseEvent as ReactMouseEvent } from 'react';
 import { jsx } from '@emotion/core';
 
+import { usePageLayoutApi } from '../../../page-layout';
 import { useSidebar } from '../..';
 import { GrabArea } from '../grab-area';
 import { ResizeIconButton } from '../resize-icon-button';
 import { resizeControlCSS, resizeIconButtonCSS } from './styles';
+import { animate } from './utils';
 
 // TODO shadow
+// TODO cleanup event listeners properly
 export const ResizeControl = () => {
-  const initialX = useRef(0);
-  const [{ isCollapsed, width: initialWidth }, { onResize, toggle }] = useSidebar();
+  const x = useRef(0);
+  const [, { setSidebarWidth }] = usePageLayoutApi();
+  const [{ collapsedWidth, expandedWidth, isCollapsed, width }, { collapse, expand, onResize }] = useSidebar();
+  console.log('rendering resize control...');
 
-  const onMouseMove = (event: any) => {
+  const onMouseMove = (event: MouseEvent) => {
     // Allow the sidebar to be 75% of the available page width
     const maxWidth = Math.round((window.innerWidth / 4) * 3);
-    const minWidth = 20;
-
-    const adjustedMax = maxWidth - initialWidth;
-    const adjustedMin = minWidth - initialWidth;
-
     const delta = Math.max(
-        Math.min(event.pageX - initialX.current, adjustedMax),
-        adjustedMin,
+        Math.min(event.pageX - width, maxWidth - width),
+        collapsedWidth - width,
     );
-    const width = initialWidth + delta;
 
-    onResize(width);
+    x.current = width + delta;
+
+    setSidebarWidth(x.current);
   };
 
   const onMouseUp = () => {
-    initialX.current = 0;
+    onResize(x.current);
+
+    x.current = 0;
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
   };
 
-  const onMouseDown = (event: MouseEvent) => {
-    initialX.current = event.pageX;
+  const onMouseDown = (event: ReactMouseEvent<HTMLDivElement>) => {
+    x.current = event.pageX;
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   };
 
   const onResizeIconButtonClick = () => {
-    toggle();
+    animate({
+      from: width,
+      to: isCollapsed ? expandedWidth : collapsedWidth,
+      setWidth: setSidebarWidth,
+      onComplete: isCollapsed ? expand : collapse,
+    });
   };
 
   return (
       <div css={resizeControlCSS}>
-        <GrabArea onMouseDown={onMouseDown} />
+        {!isCollapsed && <GrabArea onMouseDown={onMouseDown} />}
         <ResizeIconButton
             css={resizeIconButtonCSS}
             isCollapsed={isCollapsed}

@@ -2,37 +2,34 @@ import { createHook, createStore } from 'react-sweet-state';
 
 const Store = createStore({
   initialState: {
+    collapsedWidth: 25,
+    expandedWidth: 250,
     isCollapsed: false,
     width: 250,
   },
   actions: {
-    collapse: () => ({ setState }) => {
+    collapse: () => ({ getState, setState }) => {
+      const { collapsedWidth } = getState();
       setState({
         isCollapsed: true,
-        width: 25,
+        width: collapsedWidth,
       });
     },
-    expand: () => ({ setState }) => {
+    expand: () => ({ getState, setState }) => {
+      const { expandedWidth } = getState();
       setState({
         isCollapsed: false,
-        width: 250,
+        width: expandedWidth,
       });
     },
     onResize: (width: number) => ({ getState, setState }) => {
       const { width: currentWidth } = getState();
       if (currentWidth !== width) {
-        console.log('width', width);
         setState({
+          expandedWidth: width,
           width,
         });
       }
-    },
-    toggle: () => ({ getState, setState }) => {
-      const isCollapsed = !getState().isCollapsed;
-      setState({
-        isCollapsed,
-        width: isCollapsed ? 25 : 250,
-      });
     },
   },
   name: '@atlaskit/sidebar',

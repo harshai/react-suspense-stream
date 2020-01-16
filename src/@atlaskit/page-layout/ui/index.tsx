@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { jsx, Global, css } from '@emotion/core';
+import { usePageLayout } from '../controllers/use-page-layout';
 // Emotion lack grid support: https://github.com/emotion-js/emotion/issues/1617
 
 type SlotProps = {
@@ -96,73 +97,18 @@ const Main = (props: { children: ReactNode }) => {
   );
 };
 
-type LeftSidebarTransitionProps = {
-  width?: string;
-};
-
-const usePrevious = (value: any) => {
-  const ref = useRef();
-
-  useEffect(() => {
-    ref.current = value;
-  }, [value]);
-
-  return ref.current;
-};
-
-const easeInOutQuad = (t: number) => t<.5 ? 2*t*t : -1+(4-2*t)*t;
-const toNumber = (value: string) => parseInt(value.replace('px', ''), 10);
-
-const LeftSidebarTransition = (props: LeftSidebarTransitionProps) => {
-  const { width } = props;
+const LeftSidebarTransition = () => {
+  const [{ leftSidebarWidth }, { setSidebarRef }] = usePageLayout();
   const stylesRef = useRef(null);
-  const [leftSidebarWidth, setLeftSidebarWidth] = useState(width);
-  const prevWidth = usePrevious(leftSidebarWidth);
+  console.log('rendering sidebar transition...');
 
   useEffect(() => {
-    setLeftSidebarWidth(width);
-  //   if (prevwidth && (width !== prevwidth)) {
-  //     const x1 = tonumber(prevwidth! as string);
-  //     const x2 = tonumber(width! as string);
-  //     const duration = 500;
-  //     const start = performance.now();
-  //     const transition = (t: number) => {
-  //       const delta = t - start;
-  //       // progress = 0 -> 1
-  //       const progress = math.min(delta / duration, 1);
-  //       const position = x1 + (x2 - x1) * easeinoutquad(progress);
-  //       const currentwidth = math.round(position);
-  //
-  //       stylesref.current.innerhtml = `
-  //           :root {
-  //             --leftsidebarwidth: ${currentwidth}px;
-  //           }
-  //         `;
-  //
-  //       if (delta < duration) {
-  //         requestanimationframe(transition);
-  //       } else {
-  //         setleftsidebarwidth(width);
-  //       }
-  //     };
-  //
-  //     requestanimationframe(transition);
-  //   }
-  }, [prevWidth, width]);
-
-  // return (
-  //     <Global
-  //         styles={css`
-  //         :root {
-  //           --leftSidebarWidth: ${leftSidebarWidth};
-  //         }
-  //       `}
-  //     />
-  // );
+    setSidebarRef(stylesRef);
+  }, []);
 
   const rules = `
     :root {
-      --leftSidebarWidth: ${leftSidebarWidth};
+      --leftSidebarWidth: ${leftSidebarWidth}px;
     }
   `;
 
@@ -172,7 +118,7 @@ const LeftSidebarTransition = (props: LeftSidebarTransitionProps) => {
 };
 
 const LeftSidebar = (props: SlotProps) => {
-  const { children, width, isFixed } = props;
+  const { children, isFixed } = props;
   const styles = {
     position: 'fixed',
     background: 'green',
@@ -194,8 +140,8 @@ const LeftSidebar = (props: SlotProps) => {
   return (
       <div css={leftSidebarStyles}>
         <div css={fixedStyles}>
-          <LeftSidebarTransition width={width}/>
           {children}
+          <LeftSidebarTransition />
         </div>
       </div>
   );
