@@ -10,14 +10,12 @@ export const Sidebar = () => {
   const [{ route }] = useRouter();
   console.log('rendering sidebar...');
 
-  setSidebarWidth(250);
-
   // @ts-ignore
   if (!route.sidebar) return null;
 
   return (
       <LeftSidebar isFixed>
-        <SidebarLayout>
+        <SidebarLayout width={250} onWidthChange={setSidebarWidth}>
           <ErrorBoundary>
             <Suspense fallback={'...'}>
               {/*

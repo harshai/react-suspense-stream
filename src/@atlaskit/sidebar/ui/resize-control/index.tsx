@@ -2,18 +2,20 @@
 import { useRef, MouseEvent as ReactMouseEvent } from 'react';
 import { jsx } from '@emotion/core';
 
-import { usePageLayoutApi } from '../../../page-layout';
 import { useSidebar } from '../..';
 import { GrabArea } from '../grab-area';
 import { ResizeIconButton } from '../resize-icon-button';
 import { resizeControlCSS, resizeIconButtonCSS } from './styles';
 import { animate } from './utils';
 
+export type ResizeControlProps = {
+  onWidthChange: (width: number) => void;
+};
+
 // TODO shadow
 // TODO cleanup event listeners properly
-export const ResizeControl = () => {
+export const ResizeControl = ({ onWidthChange }: ResizeControlProps) => {
   const x = useRef(0);
-  const [, { setSidebarWidth }] = usePageLayoutApi();
   const [{ collapsedWidth, expandedWidth, isCollapsed, width }, { collapse, expand, onResize }] = useSidebar();
   console.log('rendering resize control...');
 
@@ -27,11 +29,12 @@ export const ResizeControl = () => {
 
     x.current = width + delta;
 
-    setSidebarWidth(x.current);
+    onWidthChange(x.current);
   };
 
   const onMouseUp = () => {
     onResize(x.current);
+    onWidthChange(x.current);
 
     x.current = 0;
     document.removeEventListener('mousemove', onMouseMove);
@@ -48,7 +51,7 @@ export const ResizeControl = () => {
     animate({
       from: width,
       to: isCollapsed ? expandedWidth : collapsedWidth,
-      setWidth: setSidebarWidth,
+      setWidth: onWidthChange,
       onComplete: isCollapsed ? expand : collapse,
     });
   };
@@ -58,8 +61,8 @@ export const ResizeControl = () => {
         {!isCollapsed && <GrabArea onMouseDown={onMouseDown} />}
         <ResizeIconButton
             css={resizeIconButtonCSS}
+            className="resize-icon-button"
             isCollapsed={isCollapsed}
-            isHighlighted={false}
             label="Toggle navigation"
             onClick={onResizeIconButtonClick}
         />

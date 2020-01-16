@@ -1,4 +1,4 @@
-import { createHook, createStore } from 'react-sweet-state';
+import { createContainer, createHook, createStore } from 'react-sweet-state';
 
 const Store = createStore({
   initialState: {
@@ -33,6 +33,12 @@ const Store = createStore({
     },
   },
   name: '@atlaskit/sidebar',
+});
+
+export const SidebarContainer = createContainer(Store, {
+  onInit: () => ({}, { setWidth, width }) => {
+    setWidth(width);
+  },
 });
 
 export const useSidebar = createHook(Store);
