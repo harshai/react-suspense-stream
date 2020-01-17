@@ -11,7 +11,6 @@ export type SidebarLayoutProps = {
   width: number;
 };
 
-// TODO another sidebar selector
 export const SidebarLayout = ({ children, onWidthChange, width }: SidebarLayoutProps) => {
   const [{ expandedWidth, isCollapsed }] = useSidebar();
   return (

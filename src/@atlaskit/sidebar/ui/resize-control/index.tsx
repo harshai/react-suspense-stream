@@ -7,7 +7,6 @@ import { GrabArea } from '../grab-area';
 import { ResizeIconButton } from '../resize-icon-button';
 import { resizeControlCSS, resizeIconButtonCSS } from './styles';
 
-// TODO shadow
 // TODO cleanup event listeners properly
 export const ResizeControl = () => {
   const x = useRef(0);

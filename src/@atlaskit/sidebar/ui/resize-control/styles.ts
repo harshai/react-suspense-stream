@@ -1,7 +1,7 @@
 import { B100, B200 } from '@atlaskit/theme/colors';
 
 export const resizeControlCSS = {
-  background: 'red',
+  background: 'white',
   height: '100%',
   left: '100%',
   position: 'absolute',
