@@ -6,7 +6,7 @@ const Store = createStore({
     collapsedWidth: 25,
     expandedWidth: 250,
     isCollapsed: false,
-    isFlyoutOpen: false,
+    liveWidth: 250,
     width: 250,
   },
   actions: {
@@ -22,6 +22,9 @@ const Store = createStore({
         },
         setWidth: (currentWidth: number) => {
           setWidth(currentWidth);
+          setState({
+            liveWidth: currentWidth,
+          });
         },
         to: collapsedWidth,
       });
@@ -38,42 +41,20 @@ const Store = createStore({
         },
         setWidth: (currentWidth: number) => {
           setWidth(currentWidth);
+          setState({
+            liveWidth: currentWidth,
+          });
         },
         to: expandedWidth,
       });
     },
-    flyin: () => ({ getState, setState }) => {
-      const { collapsedWidth, isCollapsed, width } = getState();
-      if (isCollapsed) {
+    resize: (width: number) => ({ getState, setState }, { setWidth }) => {
+      const { isCollapsed, width: currentWidth } = getState();
+      if (!isCollapsed && currentWidth !== width) {
+        setWidth(width);
         setState({
-          isFlyoutOpen: false,
+          liveWidth: width,
         });
-        // animate({
-        //   from: width,
-        //   setWidth: (currentWidth: number) => {
-        //     setState({
-        //       width: currentWidth,
-        //     });
-        //   },
-        //   to: collapsedWidth,
-        // });
-      }
-    },
-    flyout: () => ({ getState, setState }) => {
-      const { expandedWidth, isCollapsed, width } = getState();
-      if (isCollapsed) {
-        setState({
-          isFlyoutOpen: true,
-        });
-        // animate({
-        //   from: width,
-        //   setWidth: (currentWidth: number) => {
-        //     setState({
-        //       width: currentWidth,
-        //     });
-        //   },
-        //   to: expandedWidth,
-        // });
       }
     },
     setWidth: (width: number) => ({ getState, setState }, { setWidth }) => {
@@ -82,6 +63,7 @@ const Store = createStore({
         setWidth(width);
         setState({
           expandedWidth: width,
+          liveWidth: width,
           width,
         });
       }
@@ -99,11 +81,17 @@ export const SidebarContainer = createContainer(Store, {
   },
 });
 
-export const useSidebar = createHook(Store);
+export type SidebarOptions = {
+  live?: boolean;
+};
+
+export const useSidebar = createHook(Store, {
+  selector: (state, { live } : SidebarOptions = { live: false }) => {
+    const { liveWidth, width, ...sidebarState } = state;
+    return live ? { ...sidebarState, width: liveWidth } : { ...sidebarState, width };
+  },
+});
 
 export const useSidebarApi = createHook(Store, {
   selector: null,
 });
-
-
-// Selectors for live updates and committed only

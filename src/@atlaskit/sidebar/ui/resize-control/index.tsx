@@ -7,15 +7,11 @@ import { GrabArea } from '../grab-area';
 import { ResizeIconButton } from '../resize-icon-button';
 import { resizeControlCSS, resizeIconButtonCSS } from './styles';
 
-export type ResizeControlProps = {
-  onWidthChange: (width: number) => void;
-};
-
 // TODO shadow
 // TODO cleanup event listeners properly
-export const ResizeControl = ({ onWidthChange }: ResizeControlProps) => {
+export const ResizeControl = () => {
   const x = useRef(0);
-  const [{ collapsedWidth, isCollapsed, width }, { collapse, expand, setWidth }] = useSidebar();
+  const [{ collapsedWidth, isCollapsed, width }, { collapse, expand, resize, setWidth }] = useSidebar();
   console.log('rendering resize control...');
 
   const onMouseMove = (event: MouseEvent) => {
@@ -28,13 +24,11 @@ export const ResizeControl = ({ onWidthChange }: ResizeControlProps) => {
 
     x.current = width + delta;
 
-    onWidthChange(x.current);
+    resize(x.current);
   };
 
   const onMouseUp = () => {
     setWidth(x.current);
-    onWidthChange(x.current);
-
     x.current = 0;
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
