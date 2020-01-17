@@ -6,7 +6,6 @@ import { useSidebar } from '../..';
 import { GrabArea } from '../grab-area';
 import { ResizeIconButton } from '../resize-icon-button';
 import { resizeControlCSS, resizeIconButtonCSS } from './styles';
-import { animate } from './utils';
 
 export type ResizeControlProps = {
   onWidthChange: (width: number) => void;
@@ -16,7 +15,7 @@ export type ResizeControlProps = {
 // TODO cleanup event listeners properly
 export const ResizeControl = ({ onWidthChange }: ResizeControlProps) => {
   const x = useRef(0);
-  const [{ collapsedWidth, expandedWidth, isCollapsed, width }, { collapse, expand, onResize }] = useSidebar();
+  const [{ collapsedWidth, isCollapsed, width }, { collapse, expand, setWidth }] = useSidebar();
   console.log('rendering resize control...');
 
   const onMouseMove = (event: MouseEvent) => {
@@ -33,7 +32,7 @@ export const ResizeControl = ({ onWidthChange }: ResizeControlProps) => {
   };
 
   const onMouseUp = () => {
-    onResize(x.current);
+    setWidth(x.current);
     onWidthChange(x.current);
 
     x.current = 0;
@@ -48,12 +47,11 @@ export const ResizeControl = ({ onWidthChange }: ResizeControlProps) => {
   };
 
   const onResizeIconButtonClick = () => {
-    animate({
-      from: width,
-      to: isCollapsed ? expandedWidth : collapsedWidth,
-      setWidth: onWidthChange,
-      onComplete: isCollapsed ? expand : collapse,
-    });
+    if (isCollapsed) {
+      expand();
+    } else {
+      collapse();
+    }
   };
 
   return (

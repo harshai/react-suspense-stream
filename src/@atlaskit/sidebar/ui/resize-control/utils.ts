@@ -2,7 +2,7 @@ const easeInOutQuad = (t: number) => t < .5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
 
 export type AnimateArgs = {
   from: number,
-  onComplete: () => void;
+  onComplete?: () => void;
   setWidth: (x: number) => void;
   to: number,
 };
@@ -22,7 +22,9 @@ export const animate = ({ from, onComplete, setWidth, to }: AnimateArgs) => {
       requestAnimationFrame(transition);
     } else {
       setWidth(to);
-      onComplete();
+      if (onComplete) {
+        onComplete();
+      }
     }
   };
 
