@@ -7,6 +7,7 @@ import { projectSidebarResource } from '../resources';
 export const ProjectSidebar = () => {
   const [{ data, error, promise }] = useResource(projectSidebarResource);
   const [isOpen, setIsOpen] = useState(false);
+  console.log('rendering project sidebar...');
 
   if (!data && !error && promise) {
     throw promise;

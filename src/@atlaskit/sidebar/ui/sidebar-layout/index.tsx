@@ -13,6 +13,7 @@ export type SidebarLayoutProps = {
 
 export const SidebarLayout = ({ children, onWidthChange, width }: SidebarLayoutProps) => {
   const [{ expandedWidth, isCollapsed }] = useSidebar();
+  console.log('rendering sidebar layout...');
   return (
       <SidebarContainer isGlobal setWidth={onWidthChange} width={width}>
         <aside css={sidebarCSS(isCollapsed, expandedWidth)}>

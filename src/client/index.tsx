@@ -1,6 +1,7 @@
 import 'react-app-polyfill/ie11';
 import 'react-app-polyfill/stable';
 
+import whyDidYouRender from '@welldone-software/why-did-you-render';
 import React from 'react';
 import { hydrate } from 'react-dom';
 // @ts-ignore
@@ -13,6 +14,8 @@ import { routes } from './routes';
 
 // @ts-ignore
 const Layout = window.__LAYOUT__ === 'modern' ? ModernLayout : LegacyLayout;
+
+whyDidYouRender(React);
 
 hydrate(
     <Router

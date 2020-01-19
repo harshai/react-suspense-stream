@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { useRef, MouseEvent as ReactMouseEvent } from 'react';
+import { useRef, MouseEvent as ReactMouseEvent, memo } from 'react';
 import { jsx } from '@emotion/core';
 
 import { useSidebar } from '../..';
@@ -8,7 +8,7 @@ import { ResizeIconButton } from '../resize-icon-button';
 import { resizeControlCSS, resizeIconButtonCSS } from './styles';
 
 // TODO cleanup event listeners properly
-export const ResizeControl = () => {
+export const ResizeControl = memo(() => {
   const x = useRef(0);
   const [{ collapsedWidth, isCollapsed, width }, { collapse, expand, resize, setWidth }] = useSidebar();
   console.log('rendering resize control...');
@@ -59,4 +59,4 @@ export const ResizeControl = () => {
         />
       </div>
   );
-};
+});

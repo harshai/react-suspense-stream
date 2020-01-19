@@ -18,6 +18,7 @@
     "@atlaskit/tooltip": "^15.2.1",
     "@emotion/core": "^10.0.22",
     "@types/react-transition-group": "^4.2.3",
+    "@welldone-software/why-did-you-render": "^3.5.0",
     "css-vars-ponyfill": "^2.1.2",
     "express": "^4.16.4",
     "history": "^4.10.1",
