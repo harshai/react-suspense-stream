@@ -1,5 +1,5 @@
 import { createContainer, createHook, createStore } from 'react-sweet-state';
-import { animate } from '../ui/resize-control/utils';
+import { animate } from './utils';
 
 const Store = createStore({
   initialState: {
