@@ -1,7 +1,27 @@
-import { createContainer, createHook, createStore } from 'react-sweet-state';
+import { ActionAny, createContainer, createHook, createStore } from 'react-sweet-state';
 import { animate } from './utils';
 
-const Store = createStore({
+type SidebarState = {
+  collapsedWidth: number;
+  expandedWidth: number;
+  isCollapsed: boolean;
+  liveWidth: number;
+  width: number;
+};
+
+type ContainerProps = {
+  setWidth: (width: number) => void;
+  width: number;
+};
+
+type SidebarActions = {
+  collapse: () => ActionAny<SidebarState, ContainerProps>;
+  expand: () => ActionAny<SidebarState, ContainerProps>;
+  resize: (width: number) => ActionAny<SidebarState, ContainerProps>;
+  setWidth: (width: number) => ActionAny<SidebarState, ContainerProps>;
+};
+
+const Store = createStore<SidebarState, SidebarActions>({
   initialState: {
     collapsedWidth: 25,
     expandedWidth: 250,
@@ -72,12 +92,9 @@ const Store = createStore({
   name: '@atlaskit/sidebar',
 });
 
-export const SidebarContainer = createContainer(Store, {
+export const SidebarContainer = createContainer<SidebarState, SidebarActions, ContainerProps>(Store, {
   onInit: () => ({ setState }, { setWidth, width }) => {
     setWidth(width);
-    setState({
-      setWidth,
-    });
   },
 });
 
@@ -85,7 +102,13 @@ export type SidebarOptions = {
   live?: boolean;
 };
 
-export const useSidebar = createHook(Store, {
+type UseSidebarState = Omit<SidebarState, 'liveWidth'>;
+
+type UseSidebarArgs = Partial<{
+  live: boolean;
+}> | undefined;
+
+export const useSidebar = createHook<SidebarState, SidebarActions, UseSidebarState, UseSidebarArgs>(Store, {
   selector: (state, { live } : SidebarOptions = { live: false }) => {
     const { liveWidth, width, ...sidebarState } = state;
     return live ? { ...sidebarState, width: liveWidth } : { ...sidebarState, width };

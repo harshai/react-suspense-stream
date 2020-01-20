@@ -1,7 +1,18 @@
-import { createHook, createStore } from 'react-sweet-state';
+import { ActionAny, createHook, createStore } from 'react-sweet-state';
 import { RefObject } from 'react';
 
-const Store = createStore({
+type PageLayoutState = {
+  sidebarRef: RefObject<HTMLStyleElement> | undefined;
+  sidebarWidth: number;
+  initialWidth: number;
+};
+
+type PageLayoutActions = {
+  setSidebarRef: (sidebarRef: RefObject<HTMLStyleElement>) => ActionAny<PageLayoutState>;
+  setSidebarWidth: (width: number) => ActionAny<PageLayoutState>;
+};
+
+const Store = createStore<PageLayoutState, PageLayoutActions>({
   initialState: {
     sidebarRef: undefined,
     sidebarWidth: 0,

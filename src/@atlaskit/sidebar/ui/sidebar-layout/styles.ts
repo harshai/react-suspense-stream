@@ -41,4 +41,4 @@ export const sidebarContentCSS = {
     right: 0,
     width: 3,
   },
-};
+} as const;

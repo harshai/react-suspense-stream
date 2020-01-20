@@ -27,7 +27,7 @@ export const ProjectSidebar = () => {
           )}
           trigger={triggerProps => (
               <button
-                  {...triggerProps}
+                  {...triggerProps as any}
                   onClick={() => setIsOpen(!isOpen)}
                   type="button"
               >
