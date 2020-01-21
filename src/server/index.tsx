@@ -16,7 +16,7 @@ const server = express();
 const render = (req: Request, res: Response, Layout: ComponentType<{}>) => {
   const location = req.url;
   // const baseUrl = `${req.protocol}://${req.get('Host')}`;
-  const baseUrl = 'http://localhost:3000';
+  const baseUrl = `http://localhost:${process.env.PORT || 3000}`;
   const resourceContext = { baseUrl };
   const resourcesPromise = StaticRouter.requestResources({
     location,

@@ -8,7 +8,7 @@ let currentApp = app;
 
 const port = process.env.PORT || 3000;
 // @ts-ignore
-server.listen(process.env.PORT || 3000, error => {
+server.listen(port, error => {
   if (error) {
     console.log(error);
   }

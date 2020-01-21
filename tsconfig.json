@@ -1,14 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es5",
-    "module": "es2015",
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "strict": true,
     "allowSyntheticDefaultImports": true,
-    "preserveConstEnums": true,
+    "esModuleInterop": true,
     "jsx": "react",
-    "typeRoots": ["./node_modules/@types", "types"],
     "lib": [
       "dom",
       "es5",
@@ -19,6 +13,17 @@
       "es2015.iterable",
       "es2015.promise",
       "es2016.array.include"
-    ]
-  }
+    ],
+    "module": "es2015",
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "preserveConstEnums": true,
+    "strict": true,
+    "target": "es6",
+    "typeRoots": ["./node_modules/@types", "types"]
+  },
+  "include": [
+    "src/@atlaskit/page-layout/**/*",
+    "src/@atlaskit/sidebar/**/*"
+  ]
 }
