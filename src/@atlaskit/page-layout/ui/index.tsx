@@ -11,7 +11,7 @@ type SlotProps = {
   isFixed?: boolean;
 };
 
-const Banner = (props: SlotProps) => {
+export const BannerLayout = (props: SlotProps) => {
   const { children, height, isFixed } = props;
   const styles = {
     background: 'red',
@@ -45,7 +45,7 @@ const Banner = (props: SlotProps) => {
   );
 };
 
-const Nav = (props: SlotProps) => {
+export const NavigationLayout = (props: SlotProps) => {
   const { children, height, isFixed } = props;
   const styles = {
     background: 'blue',
@@ -81,7 +81,7 @@ const Nav = (props: SlotProps) => {
   );
 };
 
-const Main = (props: { children: ReactNode }) => {
+export const MainLayout = (props: { children: ReactNode }) => {
   const { children } = props;
   const mainStyles = {
     background: 'purple',
@@ -117,7 +117,7 @@ const LeftSidebarTransition = () => {
   );
 };
 
-const LeftSidebar = (props: SlotProps) => {
+export const LeftSidebarLayout = (props: SlotProps) => {
   const { children, isFixed } = props;
   const styles = {
     position: 'fixed',
@@ -147,7 +147,7 @@ const LeftSidebar = (props: SlotProps) => {
   );
 };
 
-const RightSidebar = (props: SlotProps) => {
+export const RightSidebarLayout = (props: SlotProps) => {
   const { children, width, isFixed } = props;
   const styles = {
     position: 'fixed',
@@ -179,7 +179,7 @@ const RightSidebar = (props: SlotProps) => {
   );
 };
 
-const LeftPanel = (props: SlotProps) => {
+export const LeftPanelLayout = (props: SlotProps) => {
   const { children, width, isFixed } = props;
   const styles = {
     position: 'fixed',
@@ -212,7 +212,7 @@ const LeftPanel = (props: SlotProps) => {
   );
 };
 
-const RightPanel = (props: SlotProps) => {
+export const RightPanelLayout = (props: SlotProps) => {
   const { children, width } = props;
   const rightPanelStyles = {
     gridArea: 'right-panel',
@@ -236,7 +236,7 @@ const RightPanel = (props: SlotProps) => {
   );
 };
 
-const Grid = (props: SlotProps) => {
+export const PageLayout = (props: SlotProps) => {
   const { children } = props;
 
   const areas = `"left-panel banner banner banner right-panel"
@@ -272,5 +272,3 @@ const Grid = (props: SlotProps) => {
       </div>
   );
 };
-
-export { Banner, Nav, LeftPanel, Main, RightPanel, LeftSidebar, RightSidebar, Grid };

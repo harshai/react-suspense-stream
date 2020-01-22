@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { Nav } from '../../@atlaskit/page-layout';
+import { NavigationLayout } from '../../@atlaskit/page-layout';
 import { Link } from '@atlaskit/router';
 import React, { ComponentProps } from 'react';
 
@@ -31,10 +31,10 @@ const NavLink = (props: ComponentProps<typeof Link> & { isLegacy?: boolean, layo
 };
 
 export const Navigation = (props: { layoutType: LayoutType }) => (
-    <Nav height={height} isFixed>
+    <NavigationLayout height={height} isFixed>
       <nav style={navigationStyles}>
         <NavLink {...props} href="/">Home</NavLink>
         <NavLink {...props} href="/settings" isLegacy>Settings</NavLink>
       </nav>
-    </Nav>
+    </NavigationLayout>
 );

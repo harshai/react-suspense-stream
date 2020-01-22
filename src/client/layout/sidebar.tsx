@@ -1,7 +1,7 @@
 import { useRouter } from '@atlaskit/router';
 import React, { Suspense } from 'react';
 
-import { LeftSidebar, usePageLayoutApi } from '../../@atlaskit/page-layout';
+import { LeftSidebarLayout, usePageLayoutApi } from '../../@atlaskit/page-layout';
 import { SidebarLayout } from '../../@atlaskit/sidebar';
 import { ErrorBoundary } from './error-boundary';
 
@@ -14,7 +14,7 @@ export const Sidebar = () => {
   if (!route.sidebar) return null;
 
   return (
-      <LeftSidebar isFixed>
+      <LeftSidebarLayout isFixed>
         <SidebarLayout width={250} onWidthChange={setSidebarWidth}>
           <ErrorBoundary>
             <Suspense fallback={'...'}>
@@ -24,6 +24,6 @@ export const Sidebar = () => {
             </Suspense>
           </ErrorBoundary>
         </SidebarLayout>
-      </LeftSidebar>
+      </LeftSidebarLayout>
   );
 };

@@ -1,9 +1,9 @@
 import React from 'react';
 import {
-  Grid,
-  Banner,
-  Main,
-  RightPanel,
+  BannerLayout,
+  MainLayout,
+  PageLayout,
+  RightPanelLayout,
 } from '../../@atlaskit/page-layout';
 import { Global } from '@emotion/core';
 
@@ -21,19 +21,19 @@ export const ModernLayout = () => {
   return (
       <div>
         <Global styles={globalStyles}/>
-        <Grid>
-          <Banner height="50px" isFixed>
+        <PageLayout>
+          <BannerLayout height="50px" isFixed>
             Banner
-          </Banner>
+          </BannerLayout>
           <Navigation layoutType='modern'/>
           <Sidebar/>
-          <Main>
+          <MainLayout>
             <Content/>
-          </Main>
-          <RightPanel width="200px">
+          </MainLayout>
+          <RightPanelLayout width="200px">
             Right
-          </RightPanel>
-        </Grid>
+          </RightPanelLayout>
+        </PageLayout>
       </div>
   );
 };

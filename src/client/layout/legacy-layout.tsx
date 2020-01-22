@@ -1,8 +1,8 @@
 /** @jsx jsx */
 import {
-  Grid,
-  Banner,
-  RightPanel
+  BannerLayout,
+  PageLayout,
+  RightPanelLayout,
 } from '../../@atlaskit/page-layout';
 import { jsx, Global } from '@emotion/core';
 
@@ -55,16 +55,16 @@ export const LegacyLayout = () => {
       <div id="page-body" css={pageBodyStyles}>
         <Global styles={globalStyles}/>
         <div id="navigation-app" css={navigationAppStyles}>
-          <Grid>
-            <Banner height="50px" isFixed>
+          <PageLayout>
+            <BannerLayout height="50px" isFixed>
               Banner
-            </Banner>
+            </BannerLayout>
             <Navigation layoutType='legacy'/>
             <Sidebar/>
-            <RightPanel width="200px" isFixed>
+            <RightPanelLayout width="200px" isFixed>
               Right
-            </RightPanel>
-          </Grid>
+            </RightPanelLayout>
+          </PageLayout>
         </div>
         <div id="content" css={contentStyles}>
           <Content/>
