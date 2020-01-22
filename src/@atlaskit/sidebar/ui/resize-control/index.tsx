@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { useRef, MouseEvent as ReactMouseEvent, memo } from 'react';
 import { jsx } from '@emotion/core';
+import rafSchd from 'raf-schd';
 
 import { useSidebar } from '../..';
 import { GrabArea } from '../grab-area';
@@ -13,7 +14,7 @@ export const ResizeControl = memo(() => {
   const [{ collapsedWidth, isCollapsed, width }, { collapse, expand, resize, setWidth }] = useSidebar();
   console.log('rendering resize control...');
 
-  const onMouseMove = (event: MouseEvent) => {
+  const onMouseMove = rafSchd((event: MouseEvent) => {
     // Allow the sidebar to be 75% of the available page width
     const maxWidth = Math.round((window.innerWidth / 4) * 3);
     const delta = Math.max(
@@ -24,11 +25,12 @@ export const ResizeControl = memo(() => {
     x.current = width + delta;
 
     resize(x.current);
-  };
+  });
 
   const onMouseUp = () => {
     setWidth(x.current);
     x.current = 0;
+    onMouseMove.cancel();
     document.removeEventListener('mousemove', onMouseMove);
     document.removeEventListener('mouseup', onMouseUp);
   };

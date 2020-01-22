@@ -26,11 +26,12 @@ const Store = createStore<PageLayoutState, PageLayoutActions>({
       const { sidebarRef, initialWidth } = getState();
 
       if (sidebarRef && sidebarRef.current) {
-        sidebarRef.current.innerHTML = `
-           :root {
-              --leftSidebarWidth: ${width}px;
-           }
-        `;
+        document.documentElement.style.setProperty('--leftSidebarWidth', `${width}px`);
+        // sidebarRef.current.innerHTML = `
+        //    :root {
+        //       --leftSidebarWidth: ${width}px;
+        //    }
+        // `;
       }
       setState({
         sidebarWidth: width,
