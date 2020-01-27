@@ -1,7 +1,7 @@
 /** @jsx jsx */
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 import { jsx, Global, css } from '@emotion/core';
-import { usePageLayout } from '../controllers/use-page-layout';
+import { usePageLayout, usePageLayoutApi } from '../controllers/use-page-layout';
 // Emotion lack grid support: https://github.com/emotion-js/emotion/issues/1617
 
 type SlotProps = {
@@ -12,32 +12,30 @@ type SlotProps = {
 };
 
 export const BannerLayout = (props: SlotProps) => {
-  const { children, height, isFixed } = props;
-  const styles = {
-    background: 'red',
-    height: 'inherit',
-    position: 'fixed',
-    width: 'inherit',
-  };
-  const fixedStyles = isFixed ? styles : {};
+  const { children, height } = props;
+
   const bannerStyles = {
-    gridArea: 'banner',
     background: 'red',
     height: 'var(--bannerHeight)',
-    msGridColumn: 2,
-    msGridColumnSpan: 3,
-    msGridRow: 1,
     width: 'calc(100% - var(--leftPanelWidth) - var(--rightPanelWidth))',
-  };
+  } as const;
+
+  const fixedBannerStyles = {
+    background: 'red',
+    height: 'inherit',
+    position: 'fixed',
+    width: 'inherit',
+  } as const;
+
   return (
       <div css={bannerStyles}>
-        <div css={fixedStyles}>
+        <div css={fixedBannerStyles}>
           <Global
               styles={css`
-          :root {
-            --bannerHeight: ${height};
-          }
-        `}
+        :root {
+          --bannerHeight: ${height};
+        }
+      `}
           />
           {children}
         </div>
@@ -45,101 +43,106 @@ export const BannerLayout = (props: SlotProps) => {
   );
 };
 
+const contentCSS = {
+  display: 'flex',
+  width: 'calc(100% - var(--rightPanelWidth))',
+};
+
+export const ContentLayout = ({ children }: { children: ReactNode }) => (
+  <div css={contentCSS}>
+    {children}
+  </div>
+);
+
 export const NavigationLayout = (props: SlotProps) => {
-  const { children, height, isFixed } = props;
-  const styles = {
+  const { children, height } = props;
+
+  const navigationStyles = {
+    background: 'blue',
+    height: 'var(--navHeight)',
+    // TODO check 100% in IE11 without it blowing up
+    width: 'calc(100% - var(--leftPanelWidth) - var(--rightPanelWidth))',
+  } as const;
+
+  const fixedNavigationStyles = {
     background: 'blue',
     height: 'inherit',
     position: 'fixed',
     width: 'inherit',
-  };
-  const fixedStyles = isFixed ? styles : {};
-  const navStyles = {
-    gridArea: 'nav',
-    background: 'blue',
-    height: 'var(--navHeight)',
-    msGridColumn: 2,
-    msGridColumnSpan: 3,
-    msGridRow: 2,
-    // TODO check 100% in IE11 without it blowing up
-    width: 'calc(100% - var(--leftPanelWidth) - var(--rightPanelWidth))',
-  };
+  } as const;
 
   return (
-      <div css={navStyles}>
-        <div css={fixedStyles}>
-          <Global
-              styles={css`
-          :root {
-            --navHeight: ${height};
-          }
-        `}
-          />
-          {children}
-        </div>
+    <div css={navigationStyles}>
+      <div css={fixedNavigationStyles}>
+        <Global
+            styles={css`
+        :root {
+          --navHeight: ${height};
+        }
+      `}
+        />
+        {children}
       </div>
+    </div>
   );
 };
+
+const mainStyles = {
+  background: 'purple',
+  flex: '1 1 auto',
+} as const;
 
 export const MainLayout = (props: { children: ReactNode }) => {
   const { children } = props;
-  const mainStyles = {
-    background: 'purple',
-    gridArea: 'main',
-    msGridColumn: 3,
-    msGridRow: 3,
-  };
+  const mainRef = useRef(null);
 
   return (
-      <div css={mainStyles}>
+      <div css={mainStyles} ref={mainRef}>
         {children}
       </div>
   );
 };
 
 const LeftSidebarTransition = () => {
-  const [{ leftSidebarWidth }, { setSidebarRef }] = usePageLayout();
-  const stylesRef = useRef(null);
+  const [{ leftSidebarWidth }] = usePageLayout();
   console.log('rendering sidebar transition...');
 
-  useEffect(() => {
-    setSidebarRef(stylesRef);
-  }, []);
-
-  const rules = `
-    :root {
-      --leftSidebarWidth: ${leftSidebarWidth}px;
-    }
-  `;
-
   return (
-      <style ref={stylesRef} dangerouslySetInnerHTML={{ __html: rules }} />
+      <Global
+        styles={css`
+          :root {
+            --leftSidebarWidth: ${leftSidebarWidth}px;
+          }
+        `}
+      />
   );
 };
 
 export const LeftSidebarLayout = (props: SlotProps) => {
-  const { children, isFixed } = props;
-  const styles = {
-    position: 'fixed',
-    background: 'green',
-    top: 'calc(var(--bannerHeight) + var(--navHeight))',
-    left: 'var(--leftPanelWidth)',
-    bottom: 0,
-    width: 'inherit',
-  };
-  const fixedStyles = isFixed ? styles : {};
+  const { children, width } = props;
+  const sidebarRef = useRef(null);
+  const [, { setSidebarRef }] = usePageLayoutApi();
   const leftSidebarStyles = {
-    gridArea: 'left-sidebar',
     background: 'green',
-    msGridColumn: 2,
-    msGridRow: 3,
+    flexShrink: 0,
+    height: '100%',
     width: 'var(--leftSidebarWidth)',
-    height: 'calc(100vh - var(--bannerHeight) - var(--navHeight))',
-  };
+  } as const;
+
+  const fixedLeftSidebarStyles = {
+    background: 'green',
+    position: 'fixed',
+    height: 'inherit',
+    width: 'inherit',
+  } as const;
+
+  useEffect(() => {
+    setSidebarRef(sidebarRef);
+  }, []);
 
   return (
-      <div css={leftSidebarStyles}>
-        <div css={fixedStyles}>
+      <div css={leftSidebarStyles} ref={sidebarRef}>
+        <div css={fixedLeftSidebarStyles}>
           {children}
           <LeftSidebarTransition />
         </div>
@@ -215,12 +218,13 @@ export const LeftPanelLayout = (props: SlotProps) => {
 export const RightPanelLayout = (props: SlotProps) => {
   const { children, width } = props;
   const rightPanelStyles = {
-    gridArea: 'right-panel',
     background: 'grey',
-    msGridColumn: 5,
-    msGridRow: 1,
-    msGridRowSpan: 3,
-  };
+    bottom: 0,
+    left: 'calc(100% - var(--rightPanelWidth))',
+    position: 'fixed',
+    right: 0,
+    top: 0,
+  } as const;
 
   return (
       <div css={rightPanelStyles}>
@@ -236,26 +240,17 @@ export const RightPanelLayout = (props: SlotProps) => {
   );
 };
 
+const pageLayoutCSS = {
+  background: 'orange',
+  position: 'relative',
+  height: '100vh',
+} as const;
+
 export const PageLayout = (props: SlotProps) => {
   const { children } = props;
 
-  const areas = `"left-panel banner banner banner right-panel"
-                 "left-panel nav nav nav right-panel"
-                 "left-panel left-sidebar main right-sidebar right-panel"`;
-  const gridStyles = css`
-    display: -ms-grid;
-    display: grid;
-    background: orange;
-    height: 100vh;
-    grid-template-columns: var(--leftPanelWidth) var(--leftSidebarWidth) auto var(--rightSidebarWidth) var(--rightPanelWidth);
-    -ms-grid-columns: var(--leftPanelWidth) var(--leftSidebarWidth) max-content var(--rightSidebarWidth) var(--rightPanelWidth);
-    grid-template-rows: var(--bannerHeight) var(--navHeight) auto;
-    -ms-grid-rows: var(--bannerHeight) var(--navHeight) max-content;
-    grid-template-areas: ${areas};
-  `;
-
   return (
-      <div css={gridStyles}>
+      <div css={pageLayoutCSS}>
         <Global
             styles={css`
           :root {

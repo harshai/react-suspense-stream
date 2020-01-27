@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   BannerLayout,
+  ContentLayout,
   MainLayout,
   PageLayout,
   RightPanelLayout,
@@ -26,10 +27,12 @@ export const ModernLayout = () => {
             Banner
           </BannerLayout>
           <Navigation layoutType='modern'/>
-          <Sidebar/>
-          <MainLayout>
-            <Content/>
-          </MainLayout>
+          <ContentLayout>
+            <Sidebar/>
+            <MainLayout>
+              <Content/>
+            </MainLayout>
+          </ContentLayout>
           <RightPanelLayout width="200px">
             Right
           </RightPanelLayout>
