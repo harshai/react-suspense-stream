@@ -17,28 +17,20 @@ export const BannerLayout = (props: SlotProps) => {
   const bannerStyles = {
     background: 'red',
     height: 'var(--bannerHeight)',
-    width: 'calc(100% - var(--leftPanelWidth) - var(--rightPanelWidth))',
-  } as const;
-
-  const fixedBannerStyles = {
-    background: 'red',
-    height: 'inherit',
     position: 'fixed',
-    width: 'inherit',
+    width: 'calc(100% - var(--leftPanelWidth) - var(--rightPanelWidth))',
   } as const;
 
   return (
       <div css={bannerStyles}>
-        <div css={fixedBannerStyles}>
-          <Global
-              styles={css`
+        <Global
+            styles={css`
         :root {
           --bannerHeight: ${height};
         }
       `}
-          />
-          {children}
-        </div>
+        />
+        {children}
       </div>
   );
 };
@@ -49,9 +41,9 @@ const contentCSS = {
 };
 
 export const ContentLayout = ({ children }: { children: ReactNode }) => (
-  <div css={contentCSS}>
-    {children}
-  </div>
+    <div css={contentCSS}>
+      {children}
+    </div>
 );
 
 export const NavigationLayout = (props: SlotProps) => {
@@ -60,20 +52,14 @@ export const NavigationLayout = (props: SlotProps) => {
   const navigationStyles = {
     background: 'blue',
     height: 'var(--navHeight)',
+    position: 'fixed',
+    top: 'var(--bannerHeight)',
     // TODO check 100% in IE11 without it blowing up
     width: 'calc(100% - var(--leftPanelWidth) - var(--rightPanelWidth))',
   } as const;
 
-  const fixedNavigationStyles = {
-    background: 'blue',
-    height: 'inherit',
-    position: 'fixed',
-    width: 'inherit',
-  } as const;
-
   return (
-    <div css={navigationStyles}>
-      <div css={fixedNavigationStyles}>
+      <div css={navigationStyles}>
         <Global
             styles={css`
         :root {
@@ -83,18 +69,26 @@ export const NavigationLayout = (props: SlotProps) => {
         />
         {children}
       </div>
-    </div>
   );
 };
-
-const mainStyles = {
-  background: 'purple',
-  flex: '1 1 auto',
-} as const;
 
 export const MainLayout = (props: { children: ReactNode }) => {
   const { children } = props;
   const mainRef = useRef(null);
+  const [, { setMainRef }] = usePageLayoutApi();
+
+  const mainStyles = {
+    background: 'purple',
+    boxSizing: 'border-box',
+    paddingLeft: 'var(--leftSidebarWidth)',
+    paddingRight: 'var(--rightPanelWidth)',
+    paddingTop: 'calc(var(--bannerHeight) + var(--navHeight))',
+    width: '100%',
+  } as const;
+
+  useEffect(() => {
+    setMainRef(mainRef);
+  }, []);
 
   return (
       <div css={mainStyles} ref={mainRef}>
@@ -109,7 +103,7 @@ const LeftSidebarTransition = () => {
 
   return (
       <Global
-        styles={css`
+          styles={css`
           :root {
             --leftSidebarWidth: ${leftSidebarWidth}px;
           }
@@ -122,18 +116,14 @@ export const LeftSidebarLayout = (props: SlotProps) => {
   const { children, width } = props;
   const sidebarRef = useRef(null);
   const [, { setSidebarRef }] = usePageLayoutApi();
+
   const leftSidebarStyles = {
     background: 'green',
-    flexShrink: 0,
-    height: '100%',
-    width: 'var(--leftSidebarWidth)',
-  } as const;
-
-  const fixedLeftSidebarStyles = {
-    background: 'green',
+    bottom: 0,
     position: 'fixed',
-    height: 'inherit',
-    width: 'inherit',
+    top: 'calc(var(--bannerHeight) + var(--navHeight))',
+    left: 'var(--leftPanelWidth)',
+    width: 'var(--leftSidebarWidth)',
   } as const;
 
   useEffect(() => {
@@ -142,10 +132,8 @@ export const LeftSidebarLayout = (props: SlotProps) => {
 
   return (
       <div css={leftSidebarStyles} ref={sidebarRef}>
-        <div css={fixedLeftSidebarStyles}>
-          {children}
-          <LeftSidebarTransition />
-        </div>
+        {children}
+        <LeftSidebarTransition/>
       </div>
   );
 };
